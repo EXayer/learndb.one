@@ -14,15 +14,39 @@ public class Link {
             allocationSize = 1
     )
     @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="link_sequence")
-    @Column(name = "id", updatable = false, nullable = false)
+    @Column(updatable = false, nullable = false)
     private Long id;
 
+    // TODO: unique by two fields + userId
+    @Column(nullable = false, unique=true)
     private String url;
 
-    @Column
-    @Temporal(TemporalType.DATE)
+    @Column(nullable = false)
+    private String domain;
+
+    private String subDomain;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false, updatable = false)
     private Date createdAt;
 
-    public Link () {
+    protected Link () {
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+
+        // TODO: parse
+        this.domain = "domain";
+        this.subDomain = "subDomain";
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = new Date();
     }
 }
